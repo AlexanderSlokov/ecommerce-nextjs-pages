@@ -1,10 +1,11 @@
 
+
 require('dotenv').config();
 
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-
-
+import { MongoDBAdapter } from "@auth/mongodb-adapter"
+import clientPromise from "../../../lib/mongodb"
 export default NextAuth({
     providers: [
         // OAuth's authentication providers...
@@ -14,5 +15,8 @@ export default NextAuth({
             clientSecret: process.env.GOOGLE_SECRET,
         }),
 
-    ]
+    ],
+
+    adapter: MongoDBAdapter(clientPromise)
+
 })

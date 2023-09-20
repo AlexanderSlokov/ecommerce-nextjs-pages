@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../ecommerce-nextjs-pages.iml" filepath="$PROJECT_DIR$/../ecommerce-nextjs-pages.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ecommerce-nextjs-pages-for-admin.iml" filepath="$PROJECT_DIR$/../ecommerce-nextjs-pages-for-admin.iml" />
     </modules>
   </component>
 </project>
