@@ -3,7 +3,11 @@ import Layout from "@/compoments/Layout";
 export default function NewTour(){
     return(
         <Layout>
-            <input type="text" placeholder={"product name"}/>
+            <h1 >New Tour</h1>
+            <label>Tour name: </label>
+            <input type="text" placeholder={"Tour name"}/>
+            <label>Description: </label>
+            <textarea placeholder={"Tour description"}></textarea>
         </Layout>
-    )
+    );
 }
