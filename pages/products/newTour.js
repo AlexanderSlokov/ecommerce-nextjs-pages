@@ -1,6 +1,7 @@
 import Layout from "@/compoments/Layout";
 import {useState} from "react";
 import axios from "axios";
+import {useRouter} from "next/router";
 
 export default function NewTour(){
     const [name,setName] = useState('');
@@ -11,12 +12,21 @@ export default function NewTour(){
     const [endDate, setEndDate] = useState('');
     const [capacity, setCapacity] = useState('');
 
+    const router = useRouter();
+
+    const [goBackToProducts,setGobackToProduct] = useState(false);
     //function to create req, res packet product by apis
     //npm install axios
     async function createProduct(event) {
         event.preventDefault();
         const data = {name, destination, description, price, startDate, endDate, capacity};
         await axios.post('/api/products', data);
+        //after input a new product, return to main products page
+        setGobackToProduct(true);
+    }
+
+    if (goBackToProducts) {
+       router.push('/products');
     }
 
     return(
