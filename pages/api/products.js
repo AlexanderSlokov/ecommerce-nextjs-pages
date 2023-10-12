@@ -6,9 +6,16 @@ export default async function handle(req, res) {
    const {method} =req;
    await mongooseConnect();
 
-   //treat with GET request, use async
+   //treat with GET request for the list of products, use async
    if (method === 'GET') {
-      res.json( await Product.find());
+
+      // If the request has an id query of the product, response with find one
+      if (req.query?.id) {
+         res.json( await Product.findOne({_id: req.query.id}));
+      } else {
+      // If the path does not have id? Just load the list of tours
+         res.json( await Product.find());
+      }
    }
 
    if (method === 'POST') {
