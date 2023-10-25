@@ -22,15 +22,13 @@ export default function Delete_On_Product_Page () {
 
     // Function that call the delete api to delete product bases on its id
     async function deleteProduct() {
-        await axios.delete('api/products?id=' + id).then(response => {
-            setProductInfo(response.data);
-        })
-        goBack()
+        await axios.delete('api/products?id=' + id);
+        goBack();
     }
 
     return  (
         <Layout>
-            <h1 className={"text-center"}>Do you really want to delete &apos;{productInfo?.name}&apos;?
+            <h1 className={"text-center"}>Do you really want to delete &apos;{productInfo?.name}?&apos;
             </h1>
             <div className={"flex gap-2 justify-center"}>
                 <button
