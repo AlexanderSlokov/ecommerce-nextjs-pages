@@ -45,7 +45,7 @@ export default async function handle(req, res) {
         links.push(link);
     }
 
-    return res.json('ok');
+    return res.json({links});
 }
 
 export const config  = {

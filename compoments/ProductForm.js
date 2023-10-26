@@ -4,6 +4,7 @@ import {useState} from "react";
 
 
 
+
 export default function ProductForm({
                                         _id,
                                         name: existingName,
@@ -13,7 +14,7 @@ export default function ProductForm({
                                         startDate: existingStartDate,
                                         endDate: existingEndDate,
                                         capacity: existingCapacity,
-                                        images,
+                                        images: existingImages,
                                     })
 {
 
@@ -26,8 +27,11 @@ export default function ProductForm({
     const [endDate, setEndDate] = useState(existingEndDate || '');
     const [capacity, setCapacity] = useState(existingCapacity || '');
 
+    const [images, setImages] = useState(existingImages || []);
+
     // Router used to re-navigate back to main categories
     const router = useRouter();
+
     const [goBackToProducts, setGobackToProduct] = useState(false);
 
     //function to create request, response packets with MongoDB by apis
@@ -72,11 +76,10 @@ export default function ProductForm({
               data.append('file', file);
           }
 
-          const respond = await fetch ('/api/upload', {
-            method:'POST',
-            body:data,
-          })
-            console.log(respond);
+          const respond = await axios.post('/api/upload', data);
+          setImages(oldImages => {
+              return [...oldImages,...respond.data.links];
+          } )
         }
     }
 
@@ -98,6 +101,14 @@ export default function ProductForm({
 
             <label> Photos:</label>
             <div  className={"mb-2"}>
+
+                {/*Load our images from aws link*/}
+                {!!images?.length && images.map(link => (
+                    <div key={link} className={"h-72"}>
+                        <img src={link} alt=""/>
+                    </div>
+                ))}
+
                 <label className={"w-72 h-72 cursor-pointer flex flex-col items-center justify-center gap-1 rounded-lg bg-gray-200"}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m0-3l-3-3m0 0l-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />

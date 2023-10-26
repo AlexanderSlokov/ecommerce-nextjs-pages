@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+img {
+  @apply max-h-full;
+}
+
 input, textarea {
   @apply border-2 border-gray-400 rounded-md px-1 w-full;
   @apply mb-2;
