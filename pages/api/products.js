@@ -20,13 +20,13 @@ export default async function handle(req, res) {
     if (method === 'POST') {
         const {
             name, destination, description,
-            price, startDate, endDate, capacity
+            price, startDate, endDate, capacity, images
         } = req.body;
 
         //async-await function
         const productDoc = await Product.create({
             name, destination, description, price,
-            startDate, endDate, capacity
+            startDate, endDate, capacity, images,
         })
         res.json(productDoc);
     }
@@ -35,8 +35,11 @@ export default async function handle(req, res) {
     if (method === 'PUT') {
         const {
             name, destination, description,
-            price, startDate, endDate, capacity, _id
+            price, startDate, endDate, capacity, images, _id
         } = req.body;
+
+        // console.log(images);
+
         await Product.updateOne({_id}, {
             name,
             destination,
@@ -44,7 +47,8 @@ export default async function handle(req, res) {
             price,
             startDate,
             endDate,
-            capacity
+            capacity,
+            images,
         });
         res.json(true);
     }

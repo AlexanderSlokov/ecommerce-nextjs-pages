@@ -33,7 +33,7 @@ export default async function handle(req, res) {
     for (const file of files.file) {
         const extension = file.originalFilename.split('.').pop();
         const newFileName = Date.now() + '.' + extension;
-        console.log(extension,file);
+        // console.log(extension,file);
         await client.send(new PutObjectCommand({
             Bucket:bucketName,
             Key:newFileName,

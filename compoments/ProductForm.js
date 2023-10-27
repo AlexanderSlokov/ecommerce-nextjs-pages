@@ -46,7 +46,8 @@ export default function ProductForm({
             price,
             startDate,
             endDate,
-            capacity
+            capacity,
+            images,
         };
 
         if (_id) {
@@ -100,12 +101,12 @@ export default function ProductForm({
             />
 
             <label> Photos:</label>
-            <div  className={"mb-2"}>
+            <div  className={"mb-2 flex flex-wrap gap-2"}>
 
                 {/*Load our images from aws link*/}
                 {!!images?.length && images.map(link => (
                     <div key={link} className={"h-72"}>
-                        <img src={link} alt=""/>
+                        <img src={link} alt="" className={"rounded-lg"}/>
                     </div>
                 ))}
 
