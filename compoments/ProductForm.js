@@ -1,7 +1,8 @@
 import {useRouter} from "next/router";
 import axios from "axios";
 import {useState} from "react";
-
+import Spinner from "@/compoments/Spinner";
+import {ReactSortable} from "react-sortablejs";
 
 
 
@@ -33,6 +34,8 @@ export default function ProductForm({
     const router = useRouter();
 
     const [goBackToProducts, setGobackToProduct] = useState(false);
+    const [isUploading, setIsUpLoading] = useState(false);
+
 
     //function to create request, response packets with MongoDB by apis
     //npm install axios
@@ -68,9 +71,10 @@ export default function ProductForm({
     }
 
     //function for upload image
-    async function uploadImages(event) {
-        const files = event.target?.files;
+    async function uploadImages(ev) {
+        const files = ev.target?.files;
         if (files?.length > 0 ) {
+          setIsUpLoading(true);
           const data = new FormData();
           for (const file of files) {
               // files.forEach(file => data.append('file',file));
@@ -80,14 +84,14 @@ export default function ProductForm({
           const respond = await axios.post('/api/upload', data);
           setImages(oldImages => {
               return [...oldImages,...respond.data.links];
-          } )
+          });
+          setIsUpLoading(false);
         }
     }
 
-
-
-
-
+    function uploadImagesOrder(images) {
+        setImages(images);
+    }
 
     return (
         <form onSubmit={saveProduct}>
@@ -101,15 +105,24 @@ export default function ProductForm({
             />
 
             <label> Photos:</label>
-            <div  className={"mb-2 flex flex-wrap gap-2"}>
+            <div  className={"mb-2 flex flex-wrap gap-1"}>
+                <ReactSortable
+                    list={images}
+                    className={'flex flex-wrap gap-1'}
+                    setList={uploadImagesOrder}>
+                    {/*Load our images from aws link*/}
+                    {!!images?.length && images.map(link => (
+                        <div key={link} className={"h-72"}>
+                            <img src={link} alt="" className={"rounded-lg"}/>
+                        </div>
+                    ))}
+                </ReactSortable>
 
-                {/*Load our images from aws link*/}
-                {!!images?.length && images.map(link => (
-                    <div key={link} className={"h-72"}>
-                        <img src={link} alt="" className={"rounded-lg"}/>
-                    </div>
-                ))}
-
+                {isUploading && (
+                   <div className={'h-72 flex items-center'}>
+                        <Spinner/>
+                   </div>
+                )}
                 <label className={"w-72 h-72 cursor-pointer flex flex-col items-center justify-center gap-1 rounded-lg bg-gray-200"}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m0-3l-3-3m0 0l-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />
@@ -122,11 +135,7 @@ export default function ProductForm({
                     <input type="file"
                            onChange={uploadImages}
                            className={"hidden"}/>
-
                 </label>
-                {!images?.length && (
-                    <div>No photos for this tour.</div>
-                )}
             </div>
 
             <label>Destination: </label>

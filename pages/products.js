@@ -31,7 +31,7 @@ export default function Products() {
                 </thead>
                 <tbody>
                 {ListOfProducts.map(product => (
-                    <tr key={''}>
+                    <tr key={product._id}>
                         <td>{product.name}</td>
                         <td>
                             {/*Edit button*/}
