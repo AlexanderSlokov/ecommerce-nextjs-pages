@@ -3,42 +3,40 @@ import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-export default function Delete_On_Product_Page () {
+export default function DeleteProductPage() {
     const router = useRouter();
-    const [productInfo, setProductInfo] = useState();
-    // Get id from URL
+    const [productInfo,setProductInfo] = useState();
     const {id} = router.query;
     useEffect(() => {
         if (!id) {
             return;
         }
-        axios.get('/api/products?id=' + id).then(response =>
-            setProductInfo(response.data))
-
+        axios.get('/api/products?id='+id).then(response => {
+            setProductInfo(response.data);
+        });
     }, [id]);
     function goBack() {
         router.push('/products');
     }
-
-    // Function that call the delete api to delete product bases on its id
     async function deleteProduct() {
-        await axios.delete('api/products?id=' + id);
+        await axios.delete('/api/products?id='+id);
         goBack();
     }
-
-    return  (
+    return (
         <Layout>
-            <h1 className={"text-center"}>Do you really want to delete &apos;{productInfo?.name}?&apos;
+            <h1 className="text-center">Do you really want to delete
+                this tour?
             </h1>
-            <div className={"flex gap-2 justify-center"}>
+            <div className="flex gap-2 justify-center">
                 <button
                     onClick={deleteProduct}
-                    className={"btn-red"}> Yes </button>
-
-                <button className={"btn-default"}
-                        onClick={goBack}> No </button>
+                    className="btn-red">Yes</button>
+                <button
+                    className="btn-default"
+                    onClick={goBack}>
+                    NO
+                </button>
             </div>
         </Layout>
-
     );
 }
