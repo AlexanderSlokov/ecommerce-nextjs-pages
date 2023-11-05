@@ -5,6 +5,7 @@ import axios from "axios";
 export default function CategoriesPage() {
     const [name, setName] = useState('');
     const [categories, setCategories] = useState([]);
+    const [parentCategory, setParentCategory]= useState('');
 
     useEffect(() => {
         fetchCategories();
@@ -18,7 +19,7 @@ export default function CategoriesPage() {
     }
     async function saveCategory (event) {
        event.preventDefault();
-       await axios.post('api/categories', {name});
+       await axios.post('api/categories', {name, parentCategory});
        setName('');
        fetchCategories();
     }
@@ -33,6 +34,15 @@ export default function CategoriesPage() {
                        placeholder={'Category name'}
                        onChange={event => setName(event.target.value)}
                        value={name}/>
+
+                <select className={"mb-0"}
+                        onChange={event => setParentCategory(event.target.value)}
+                        value={parentCategory}>
+                    <option value="0">No parent category</option>
+                    {categories.length > 0 && categories.map(category => (
+                        <option value={category._id}>{category.name}</option>
+                    ))}
+                </select>
                 <button type={"submit"} className={'btn-primary py-1'}>Save</button>
             </form>
 
@@ -40,6 +50,7 @@ export default function CategoriesPage() {
                 <thead>
                 <tr>
                     <td>Category Name</td>
+                    <td>Parent category</td>
                 </tr>
                 </thead>
 
@@ -48,6 +59,7 @@ export default function CategoriesPage() {
                 (category => (
                     <tr>
                         <td>{category.name}</td>
+                        <td>{category?.parent?.name}</td>
                     </tr>
                 ))}
                 </tbody>
