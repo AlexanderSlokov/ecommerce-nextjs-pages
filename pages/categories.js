@@ -5,7 +5,8 @@ import axios from "axios";
 export default function CategoriesPage() {
     const [name, setName] = useState('');
 
-    async function saveCategory () {
+    async function saveCategory (event) {
+       event.preventDefault();
        await axios.post('api/categories', {name});
        setName('');
     }
