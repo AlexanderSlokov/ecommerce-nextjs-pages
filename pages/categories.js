@@ -1,45 +1,67 @@
 import Layout from "@/compoments/Layout";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import { withSwal } from "react-sweetalert2";
 
-export default function CategoriesPage() {
+function CategoriesPage({swal}) {
 
     // Variable to store the edited categories
-    const [editedCategory, setEditedCategory]  = useState(null);
+    const [editedCategory, setEditedCategory] = useState(null);
+
     const [name, setName] = useState('');
     const [categories, setCategories] = useState([]);
-    const [parentCategory, setParentCategory]= useState('');
+    const [parentCategory, setParentCategory] = useState('');
 
     useEffect(() => {
         fetchCategories();
     }, []);
 
     //fetch categories list when load page
-    function fetchCategories () {
+    function fetchCategories() {
         axios.get('/api/categories').then(result => {
             setCategories(result.data);
         });
     }
-    async function saveCategory (event) {
-       event.preventDefault();
-       const data  = {name, parentCategory}
 
-       if (editedCategory) {
-           data._id = editedCategory._id;
-            await axios.put ('/api/categories', data);
+    async function saveCategory(event) {
+        event.preventDefault();
+        const data = {name, parentCategory}
 
-       } else {
-           await axios.post('api/categories', data);
-       }
+        if (editedCategory) {
+            data._id = editedCategory._id;
+            await axios.put('/api/categories', data);
+            setEditedCategory(null);
 
-       setName('');
-       fetchCategories();
+        } else {
+            await axios.post('api/categories', data);
+        }
+
+        setName('');
+        fetchCategories();
     }
 
-    function editCategory (category) {
+    function editCategory(category) {
         setEditedCategory(category);
         setName(category.name);
         setParentCategory(category.parent?._id)
+    }
+
+    function deleteCategory(category){
+        swal.fire({
+            title: 'Are you sure?',
+            text: `Do you want to delete ${category.name}?`,
+            showCancelButton: true,
+            cancelButtonText: 'Cancel',
+            confirmButtonText: 'Yes, Delete!',
+            confirmButtonColor: '#d55',
+            reverseButtons: true,
+        }).then(async result => {
+            if (result.isConfirmed) {
+                const {_id} = category;
+                await axios.delete('/api/categories?_id='+_id);
+                fetchCategories();
+            }
+        });
     }
 
     return (
@@ -87,13 +109,15 @@ export default function CategoriesPage() {
                         <td>{category.name}</td>
                         <td>{category?.parent?.name}</td>
                         <td>
-
                             <button
 
                                 // We have an event when someone click on the button, so it will execute a function to do a thing!
                                 onClick={() => editCategory(category)}
-                                className={"btn-primary mr-1"}>Edit</button>
-                            <button className={"btn-primary"}>Delete</button>
+                                className={"btn-primary mr-1"}>Edit
+                            </button>
+                            <button
+                                onClick={() => deleteCategory(category)}
+                                className={"btn-primary"}>Delete</button>
                         </td>
                     </tr>
                 ))}
@@ -103,3 +127,7 @@ export default function CategoriesPage() {
         </Layout>
     )
 }
+
+export default withSwal(({swal}, ref) => (
+    <CategoriesPage swal = {swal}/>
+    ));
