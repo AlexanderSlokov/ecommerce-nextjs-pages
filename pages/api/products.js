@@ -5,7 +5,6 @@ export default async function handle(req, res) {
     const {method} = req;
     await mongooseConnect();
 
-    //treat with GET request for the list of products, use async
     if (method === 'GET') {
 
         // If the request has an id query of the product, response with find one
@@ -20,22 +19,21 @@ export default async function handle(req, res) {
     if (method === 'POST') {
         const {
             name, destination, description,
-            price, startDate, endDate, capacity, images
+            price, startDate, endDate, capacity, images, category,
         } = req.body;
 
         //async-await function
         const productDoc = await Product.create({
             name, destination, description, price,
-            startDate, endDate, capacity, images,
+            startDate, endDate, capacity, images, category,
         })
         res.json(productDoc);
     }
 
-    //If the method is PUT
     if (method === 'PUT') {
         const {
             name, destination, description,
-            price, startDate, endDate, capacity, images, _id
+            price, startDate, endDate, capacity, images, category, _id
         } = req.body;
 
         // console.log(images);
@@ -49,6 +47,7 @@ export default async function handle(req, res) {
             endDate,
             capacity,
             images,
+            category,
         });
         res.json(true);
     }

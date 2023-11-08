@@ -1,6 +1,6 @@
 import {useRouter} from "next/router";
 import axios from "axios";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Spinner from "@/compoments/Spinner";
 import {ReactSortable} from "react-sortablejs";
 
@@ -16,6 +16,7 @@ export default function ProductForm({
                                         endDate: existingEndDate,
                                         capacity: existingCapacity,
                                         images: existingImages,
+                                        category: assignedCategory,
                                     })
 {
 
@@ -23,6 +24,7 @@ export default function ProductForm({
     const [name, setName] = useState(existingName || '');
     const [destination, setDestination] = useState(existingDestination || '');
     const [description, setDescription] = useState(existingDescription || '');
+    const [category, setCategory] = useState(assignedCategory || '');
     const [price, setPrice] = useState(existingPrice || '');
     const [startDate, setStartDate] = useState(existingStartDate || '');
     const [endDate, setEndDate] = useState(existingEndDate || '');
@@ -30,12 +32,19 @@ export default function ProductForm({
 
     const [images, setImages] = useState(existingImages || []);
 
+    const [categories, setCategories] = useState([]);
+
     // Router used to re-navigate back to main categories
     const router = useRouter();
 
     const [goBackToProducts, setGobackToProduct] = useState(false);
     const [isUploading, setIsUpLoading] = useState(false);
 
+    useEffect(() => {
+        axios.get('/api/categories').then(result => {
+            setCategories(result.data);
+        })
+    }, []);
 
     //function to create request, response packets with MongoDB by apis
     //npm install axios
@@ -51,6 +60,7 @@ export default function ProductForm({
             endDate,
             capacity,
             images,
+            category,
         };
 
         if (_id) {
@@ -58,7 +68,6 @@ export default function ProductForm({
             await axios.put('/api/products', {...data, _id});
 
         } else {
-
             // If not, create it
             await axios.post('/api/products', data);
             //after input a new product, return to main products page
@@ -103,6 +112,16 @@ export default function ProductForm({
                 value={name}
                 onChange={event => setName(event.target.value)}
             />
+
+            <label>Category</label>
+            <select value={category}
+                    onChange={event  => setCategory(event.target.value)}
+            >
+                <option value="">UnCategorized</option>
+                {categories.length > 0 && categories.map(c => (
+                    <option value={c._id}>{c.name}</option>
+                ))}
+            </select>
 
             <label> Photos:</label>
             <div  className={"mb-2 flex flex-wrap gap-1"}>
