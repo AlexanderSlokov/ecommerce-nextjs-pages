@@ -18,22 +18,39 @@ export default async function handle(req, res) {
 
     if (method === 'POST') {
         const {
-            name, destination, description,
-            price, startDate, endDate, capacity, images, category,
+            name,
+            destination,
+            description,
+            price,
+            startDate,
+            endDate,
+            capacity,
+            images,
+            category,
+            properties,
         } = req.body;
 
         //async-await function
         const productDoc = await Product.create({
             name, destination, description, price,
-            startDate, endDate, capacity, images, category,
+            startDate, endDate, capacity, images, category,properties,
         })
         res.json(productDoc);
     }
 
     if (method === 'PUT') {
         const {
-            name, destination, description,
-            price, startDate, endDate, capacity, images, category, _id
+            name,
+            destination,
+            description,
+            price,
+            startDate,
+            endDate,
+            capacity,
+            images,
+            category,
+            properties,
+            _id
         } = req.body;
 
         // console.log(images);
@@ -48,7 +65,9 @@ export default async function handle(req, res) {
             capacity,
             images,
             category,
+            properties,
         });
+
         res.json(true);
     }
 

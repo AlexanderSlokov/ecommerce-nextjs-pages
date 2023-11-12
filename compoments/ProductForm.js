@@ -6,6 +6,7 @@ import {ReactSortable} from "react-sortablejs";
 
 
 
+
 export default function ProductForm({
                                         _id,
                                         name: existingName,
@@ -17,6 +18,7 @@ export default function ProductForm({
                                         capacity: existingCapacity,
                                         images: existingImages,
                                         category: assignedCategory,
+                                        properties: assignedProperties,
                                     })
 {
 
@@ -25,6 +27,7 @@ export default function ProductForm({
     const [destination, setDestination] = useState(existingDestination || '');
     const [description, setDescription] = useState(existingDescription || '');
     const [category, setCategory] = useState(assignedCategory || '');
+    const [productProperties, setProductProperties] = useState(assignedProperties || {});
     const [price, setPrice] = useState(existingPrice || '');
     const [startDate, setStartDate] = useState(existingStartDate || '');
     const [endDate, setEndDate] = useState(existingEndDate || '');
@@ -46,8 +49,6 @@ export default function ProductForm({
         })
     }, []);
 
-    //function to create request, response packets with MongoDB by apis
-    //npm install axios
     async function saveProduct(event) {
 
         event.preventDefault();
@@ -61,6 +62,7 @@ export default function ProductForm({
             capacity,
             images,
             category,
+            productProperties,
         };
 
         if (_id) {
@@ -102,10 +104,24 @@ export default function ProductForm({
         setImages(images);
     }
 
-    const properties = [];
+    function setProductProp(propName, value) {
+        setProductProperties(prev => {
+            const newProductProps = {...prev};
+            newProductProps[propName] = value;
+            return newProductProps;
+        })
+    }
+
+    const propertiesToFill = [];
     if (categories.length > 0 && category) {
-        const selectedCategoryInfo = categories.find(({_id}) => _id === category);
-        console.log({selectedCategoryInfo});
+        let catInfo = categories.find(({_id}) => _id === category);
+        // console.log({selectedCategoryInfo});
+        propertiesToFill.push(...catInfo.properties);
+        while(catInfo?.parent?.id) {
+            const parentCategory = categories.find(({_id}) => _id === catInfo?.parent?.id)
+            propertiesToFill.push(...parentCategory.properties);
+            catInfo = parentCategory;
+        }
     }
 
     return (
@@ -119,19 +135,32 @@ export default function ProductForm({
                 onChange={event => setName(event.target.value)}
             />
 
-            <label>Category</label>
+            <label>Category:</label>
             <select value={category}
                     onChange={event  => setCategory(event.target.value)}
             >
-                <option value="">UnCategorized</option>
+                <option value="">Uncategorized</option>
                 {categories.length > 0 && categories.map(c => (
+                    // eslint-disable-next-line react/jsx-key
                     <option value={c._id}>{c.name}</option>
                 ))}
             </select>
 
-            {categories.length > 0 && (
-                <div></div>
-            )}
+            {propertiesToFill.length > 0 && propertiesToFill.map(p => (
+                // eslint-disable-next-line react/jsx-key
+                <div className={"flex gap-1"}>
+                    <div>{p.name}</div>
+                    <select
+                        value={productProperties[p.name]}
+                        onChange={event =>
+                        setProductProp(p.name, event.target.value)}>
+                        {p.values.map(v => (
+                            // eslint-disable-next-line react/jsx-key
+                            <option value={v}>{v}</option>
+                        ))}
+                    </select>
+                </div>
+            ))}
 
             <label> Photos:</label>
             <div  className={"mb-2 flex flex-wrap gap-1"}>

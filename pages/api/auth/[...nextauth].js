@@ -9,16 +9,9 @@ import clientPromise from "@/lib/mongodb";
 const adminEmails = ['thanhzeus2016@gmail.com'];
 
 export const authOptions = {
-    secret: process.env.SECRET,
-    providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_SECRET
-        }),
-    ],
-    adapter: MongoDBAdapter(clientPromise),
+    DefaultAdapter: MongoDBAdapter(clientPromise),
     callbacks: {
-        session: ({session,token,user}) => {
+        session: ({session,token,user})  => {
             if (adminEmails.includes(session?.user?.email)) {
                 return session;
             } else {
@@ -26,6 +19,13 @@ export const authOptions = {
             }
         },
     },
+    secret: process.env.NEXTAUTH_SECRET,
+    providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_ID,
+            clientSecret: process.env.GOOGLE_SECRET
+        }),
+    ],
 };
 
 export default NextAuth(authOptions);
