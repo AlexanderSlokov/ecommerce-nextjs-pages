@@ -3,15 +3,14 @@ import mongoose from "mongoose";
 import {mongooseConnect} from "@/lib/mongoose";
 import {Product} from "@/models/Products";
 import {getServerSession} from "next-auth";
-import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {authOptions, isAdminRequest} from "@/pages/api/auth/[...nextauth]";
 
 export default async function handle(req, res) {
 
     const {method} = req;
     // Use mongoose to connect to MongoDB for GET request
     await mongooseConnect();
-    const session = await getServerSession(req,res, authOptions);
-    console.log(session);
+    await isAdminRequest(req, res);
 
     if (method ==='GET') {
         res.json(await Category.find().populate('parent'));
