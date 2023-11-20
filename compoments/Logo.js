@@ -8,7 +8,7 @@ export default function Logo() {
             </svg>
 
             <span className="">
-                   Traveling tour Admin
+                   TourFlare Admin
                </span>
         </Link>
     )

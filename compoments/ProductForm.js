@@ -9,7 +9,7 @@ import {ReactSortable} from "react-sortablejs";
 
 export default function ProductForm({
                                         _id,
-                                        name: existingName,
+                                        title: existingTitle,
                                         destination: existingDestination,
                                         description: existingDescription,
                                         price: existingPrice,
@@ -23,7 +23,7 @@ export default function ProductForm({
 {
 
     // Declare variables used
-    const [name, setName] = useState(existingName || '');
+    const [title, setTitle] = useState(existingTitle || '');
     const [destination, setDestination] = useState(existingDestination || '');
     const [description, setDescription] = useState(existingDescription || '');
     const [category, setCategory] = useState(assignedCategory || '');
@@ -53,7 +53,7 @@ export default function ProductForm({
 
         event.preventDefault();
         const data = {
-            name,
+            title,
             destination,
             description,
             price,
@@ -132,8 +132,8 @@ export default function ProductForm({
             <input
                 type="text"
                 placeholder={"Tour name"}
-                value={name}
-                onChange={event => setName(event.target.value)}
+                value={title}
+                onChange={event => setTitle(event.target.value)}
             />
 
             <label>Category:</label>
