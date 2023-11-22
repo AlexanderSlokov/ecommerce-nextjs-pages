@@ -30,12 +30,13 @@ export default async function handle(req, res) {
             images,
             category,
             properties,
+            status,
         } = req.body;
 
         //async-await function
         const productDoc = await Product.create({
             title, destination, description, price,
-            startDate, endDate, capacity, images, category,properties,
+            startDate, endDate, capacity, images, category,properties,status
         })
         res.json(productDoc);
     }
@@ -52,7 +53,8 @@ export default async function handle(req, res) {
             images,
             category,
             properties,
-            _id
+            _id,
+            status,
         } = req.body;
 
         // console.log(images);
@@ -68,6 +70,7 @@ export default async function handle(req, res) {
             images,
             category,
             properties,
+            status,
         });
 
         res.json(true);

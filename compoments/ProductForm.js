@@ -43,6 +43,8 @@ export default function ProductForm({
     const [goBackToProducts, setGobackToProduct] = useState(false);
     const [isUploading, setIsUpLoading] = useState(false);
 
+    // Convert date strings to Date objects
+
     useEffect(() => {
         axios.get('/api/categories').then(result => {
             setCategories(result.data);
@@ -126,6 +128,7 @@ export default function ProductForm({
     }
 
     return (
+
         <form onSubmit={saveProduct}>
 
             <label>Tour name: </label>
