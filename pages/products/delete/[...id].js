@@ -1,4 +1,4 @@
-import Layout from "@/compoments/Layout";
+import Layout from "@/components/Layout";
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import axios from "axios";

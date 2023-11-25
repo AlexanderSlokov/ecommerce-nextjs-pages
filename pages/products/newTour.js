@@ -1,6 +1,6 @@
 
-import ProductForm from "@/compoments/ProductForm";
-import Layout from "@/compoments/Layout";
+import ProductForm from "@/components/ProductForm";
+import Layout from "@/components/Layout";
 
 export default function NewTour(){
    return(

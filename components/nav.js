@@ -1,7 +1,7 @@
 import Link from "next/link"
 import {useRouter} from "next/router";
 import {signOut} from "next-auth/react";
-import Logo from "@/compoments/Logo";
+import Logo from "@/components/Logo";
 
 export default function Nav({show}) {
 

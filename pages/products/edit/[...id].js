@@ -1,8 +1,8 @@
-import Layout from "@/compoments/Layout";
+import Layout from "@/components/Layout";
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import ProductForm from "@/compoments/ProductForm";
+import ProductForm from "@/components/ProductForm";
 
 export default function EditBtnProductPage() {
 

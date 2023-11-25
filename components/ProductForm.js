@@ -1,7 +1,7 @@
 import {useRouter} from "next/router";
 import axios from "axios";
 import {useEffect, useState} from "react";
-import Spinner from "@/compoments/Spinner";
+import Spinner from "@/components/Spinner";
 import {ReactSortable} from "react-sortablejs";
 
 
@@ -169,6 +169,7 @@ export default function ProductForm({
             ))}
 
             <label> Photos:</label>
+
             <div  className={"mb-2 flex flex-wrap gap-1"}>
                 <ReactSortable
                     list={images}
@@ -217,7 +218,7 @@ export default function ProductForm({
                 onChange={event => setDescription(event.target.value)}
             ></textarea>
 
-            <label>Price (in VND):</label>
+            <label>Price (in USD):</label>
             <input
                 type="number"
                 placeholder={"Price"}
