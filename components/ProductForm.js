@@ -4,8 +4,12 @@ import {useEffect, useState} from "react";
 import Spinner from "@/components/Spinner";
 import {ReactSortable} from "react-sortablejs";
 
-
-
+const sanitizeInput = (input) => {
+    console.log('Before sanitization:', input);
+    const sanitizedInput = input.replace(/[^a-zA-Z0-9\s]/g, '');
+    console.log('After sanitization:', sanitizedInput);
+    return sanitizedInput;
+};
 
 export default function ProductForm({
                                         _id,
@@ -29,21 +33,17 @@ export default function ProductForm({
     const [category, setCategory] = useState(assignedCategory || '');
     const [productProperties, setProductProperties] = useState(assignedProperties || {});
     const [price, setPrice] = useState(existingPrice || '');
-    const [startDate, setStartDate] = useState(existingStartDate || '');
-    const [endDate, setEndDate] = useState(existingEndDate || '');
+    const [startDate, setStartDate] = useState(existingStartDate ? formatDate(existingStartDate) : '');
+    const [endDate, setEndDate] = useState(existingEndDate ? formatDate(existingEndDate) : '');
     const [capacity, setCapacity] = useState(existingCapacity || '');
+    const [categories, setCategories] = useState([]);
 
     const [images, setImages] = useState(existingImages || []);
-
-    const [categories, setCategories] = useState([]);
+    const [isUploading, setIsUpLoading] = useState(false);
 
     // Router used to re-navigate back to main categories
     const router = useRouter();
-
     const [goBackToProducts, setGobackToProduct] = useState(false);
-    const [isUploading, setIsUpLoading] = useState(false);
-
-    // Convert date strings to Date objects
 
     useEffect(() => {
         axios.get('/api/categories').then(result => {
@@ -51,6 +51,34 @@ export default function ProductForm({
         })
     }, []);
 
+    const handleTitleChange = (event) => {
+        const sanitizedTitle = sanitizeInput(event.target.value);
+        setTitle(sanitizedTitle);
+    };
+
+    const handleDestinationChange = (event) => {
+        const sanitizedDestination = sanitizeInput(event.target.value);
+        setDestination(sanitizedDestination);
+    };
+
+    const handleDescriptionChange = (event) => {
+        const sanitizedDescription = sanitizeInput(event.target.value);
+        setDescription(sanitizedDescription);
+    };
+
+    const handleCapacityChange = (event) => {
+        const sanitizedCapacity = sanitizeInput(event.target.value);
+        setCapacity(sanitizedCapacity);
+    };
+
+// Format date to YYYY-MM-DD for input[type="date"]
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        let day = ('0' + date.getDate()).slice(-2); // Format day to have two digits
+        let month = ('0' + (date.getMonth() + 1)).slice(-2); // Format month to have two digits
+        let year = date.getFullYear();
+        return `${year}-${month}-${day}`;
+    }
     async function saveProduct(event) {
 
         event.preventDefault();
@@ -78,7 +106,6 @@ export default function ProductForm({
         }
         setGobackToProduct(true);
     }
-
     if (goBackToProducts) {
         router.push('/products');
     }
@@ -128,7 +155,6 @@ export default function ProductForm({
     }
 
     return (
-
         <form onSubmit={saveProduct}>
 
             <label>Tour name: </label>
@@ -136,7 +162,7 @@ export default function ProductForm({
                 type="text"
                 placeholder={"Tour name"}
                 value={title}
-                onChange={event => setTitle(event.target.value)}
+                onChange={handleTitleChange}
             />
 
             <label>Category:</label>
@@ -208,14 +234,14 @@ export default function ProductForm({
                 type="text"
                 placeholder={"Tour destination"}
                 value={destination}
-                onChange={event => setDestination(event.target.value)}
+                onChange={handleDestinationChange}
             />
 
             <label>Description: </label>
             <textarea
                 placeholder={"Tour description"}
                 value={description}
-                onChange={event => setDescription(event.target.value)}
+                onChange={handleDescriptionChange}
             ></textarea>
 
             <label>Price (in USD):</label>
@@ -223,7 +249,7 @@ export default function ProductForm({
                 type="number"
                 placeholder={"Price"}
                 value={price}
-                onChange={event => setPrice(event.target.value)}
+                onChange={event=> setPrice(event.target.value) }
             />
 
             <label>Start Date:</label>
@@ -248,7 +274,7 @@ export default function ProductForm({
                 type="number"
                 placeholder={"Capacity"}
                 value={capacity}
-                onChange={event => setCapacity(event.target.value)}
+                onChange={handleCapacityChange}
             />
 
             <button
