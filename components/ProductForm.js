@@ -143,14 +143,24 @@ export default function ProductForm({
     }
 
     const propertiesToFill = [];
-    if (categories.length > 0 && category) {
+    if (categories?.length > 0 && category) {
         let catInfo = categories.find(({_id}) => _id === category);
-        // console.log({selectedCategoryInfo});
-        propertiesToFill.push(...catInfo.properties);
-        while(catInfo?.parent?.id) {
-            const parentCategory = categories.find(({_id}) => _id === catInfo?.parent?.id)
-            propertiesToFill.push(...parentCategory.properties);
-            catInfo = parentCategory;
+        if (catInfo) {
+            propertiesToFill.push(...catInfo.properties);
+            while(catInfo.parent?._id) {
+                const parentCategory = categories.find(({_id}) => _id === catInfo.parent._id);
+                if (parentCategory) {
+                    propertiesToFill.push(...parentCategory.properties);
+                    catInfo = parentCategory;  // Continue with the new parent category
+                } else {
+                    // If a parent category is not found, break out of the loop
+                    console.error('Parent category not found');
+                    break;
+                }
+            }
+        } else {
+            // catInfo is undefined, handle accordingly
+            console.error('Category not found');
         }
     }
 
