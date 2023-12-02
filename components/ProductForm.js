@@ -62,8 +62,8 @@ export default function ProductForm({
     };
 
     const handleDescriptionChange = (event) => {
-        const sanitizedDescription = sanitizeInput(event.target.value);
-        setDescription(sanitizedDescription);
+        setDescription(event.target.value);
+
     };
 
     const handleCapacityChange = (event) => {
@@ -82,17 +82,23 @@ export default function ProductForm({
     async function saveProduct(event) {
 
         event.preventDefault();
+
+        const properties = {};
+        propertiesToFill.forEach(prop => {
+            properties[prop.name] = productProperties[prop.name];
+        });
+
         const data = {
             title,
             destination,
             description,
-            price,
+            price: Number(price),
             startDate,
             endDate,
-            capacity,
+            capacity: Number(capacity),
             images,
             category,
-            productProperties,
+            properties,
         };
 
         if (_id) {
