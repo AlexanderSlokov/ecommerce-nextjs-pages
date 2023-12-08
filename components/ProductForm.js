@@ -41,13 +41,17 @@ export default function ProductForm({
     const [images, setImages] = useState(existingImages || []);
     const [isUploading, setIsUpLoading] = useState(false);
 
-    // Router used to re-navigate back to main categories
+    const [categoriesLoading, setCategoriesLoading] = useState(false);
+
+    // Router used to re-navigate back to the main categories
     const router = useRouter();
     const [goBackToProducts, setGobackToProduct] = useState(false);
 
     useEffect(() => {
+        setCategoriesLoading(true);
         axios.get('/api/categories').then(result => {
             setCategories(result.data);
+            setCategoriesLoading(false);
         })
     }, []);
 
@@ -108,7 +112,7 @@ export default function ProductForm({
         } else {
             // If not, create it
             await axios.post('/api/products', data);
-            //after input a new product, return to main products page
+            //after input a new product, return to the main products page
         }
         setGobackToProduct(true);
     }
@@ -191,7 +195,9 @@ export default function ProductForm({
                     <option value={c._id}>{c.name}</option>
                 ))}
             </select>
-
+            {categoriesLoading && (
+                <Spinner fullWidth={true}/>
+            )}
             {propertiesToFill.length > 0 && propertiesToFill.map(p => (
                 // eslint-disable-next-line react/jsx-key
                 <div className={""}>
@@ -217,7 +223,7 @@ export default function ProductForm({
                     list={images}
                     className={'flex flex-wrap gap-1'}
                     setList={uploadImagesOrder}>
-                    {/*Load our images from aws link*/}
+                    {/*Load our images from the aws link*/}
                     {!!images?.length && images.map(link => (
                         <div key={link} className={"h-72 bg-white p-4 shadow-md rounded-sm border border-gray-200"}>
                             <img src={link} alt="" className={"rounded-lg"}/>

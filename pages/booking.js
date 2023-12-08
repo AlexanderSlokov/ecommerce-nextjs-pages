@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import Spinner from "@/components/Spinner";
 
 function formatDateTime(dateString) {
     const options = {
@@ -15,12 +16,14 @@ function formatDateTime(dateString) {
 }
 
 export default function BookingPage() {
-
+    const [ isLoading, setIsLoading] = useState(false);
     const [bookings, setBookings] = useState([]);
 
     useEffect(() => {
+        setIsLoading(true);
         axios.get('/api/booking').then(response => {
             setBookings(response.data);
+            setIsLoading(false);
         });
     }, []);
 
@@ -39,6 +42,16 @@ export default function BookingPage() {
                 </thead>
 
                 <tbody>
+                {isLoading && (
+                        <tr>
+                            <td colSpan={4}>
+                                <div className={"py-4"}>
+                                    <Spinner fullWidth={true}/>
+                                </div>
+                            </td>
+                        </tr>
+
+                )}
                 {bookings.length > 0 && bookings.map(booking => (
                     <tr key={""}>
                         <td>{formatDateTime(booking.createdAt)}</td>
@@ -59,6 +72,7 @@ export default function BookingPage() {
                                 <>
                                     {line.price_data?.product_data.name} <br/>
                                     {line.quantity} participants <br/>
+                                    ------------------------------------ <br/>
                                 </>
                             ))}
                         </td>
