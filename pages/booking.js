@@ -57,7 +57,7 @@ export default function BookingPage() {
                         <td>{formatDateTime(booking.createdAt)}</td>
                         <td className={booking.paid ?
                         'text-green-600' : 'text-red-600'}>
-                            {booking.paid? 'YES!': 'NAH'}
+                            {booking.paid? 'YES!': 'NO!'}
                         </td>
                         <td>
                             {booking.name} <br/>
