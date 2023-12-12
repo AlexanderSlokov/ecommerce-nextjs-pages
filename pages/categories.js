@@ -11,9 +11,11 @@ function Categories({swal}) {
     const [categories,setCategories] = useState([]);
     const [properties,setProperties] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         fetchCategories();
     }, [])
+    
     function fetchCategories() {
         setIsLoading(true);
         axios.get('/api/categories').then(result => {
