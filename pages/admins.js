@@ -64,7 +64,7 @@ function AdminPage({swal}) {
     return(
         <Layout>
             <h1>Admins</h1>
-            <h2>Add a new admin</h2>
+            <h2>Add a new administrator gmail: </h2>
 
             <form onSubmit={addAdmin}>
                 <div className={"flex gap-2"}>
@@ -78,14 +78,14 @@ function AdminPage({swal}) {
 
                     <button
                         type={"submit"}
-                        className={"btn-primary py-1 whitespace-nowrap"}>Add this admin</button>
+                        className={"btn-primary py-1 whitespace-nowrap"}>Add this email</button>
                 </div>
             </form>
 
             <table className={"basic"}>
                 <thead>
                 <tr>
-                    <th className={"text-left"}>Admins Google Email</th>
+                    <th className={"text-left"}>List of Gmail stored</th>
                     <th>Created at</th>
                     <th></th>
                 </tr>

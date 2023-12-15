@@ -8,7 +8,7 @@ function SettingPage({swal}) {
     const [products, setProducts] = useState([]);
     const [featuredProductId, setFeaturedProductId] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [serviceFee, setServiceFee ] = useState('');
+    // const [serviceFee, setServiceFee ] = useState('');
 
     async function saveSetting() {
         setIsLoading(true);
@@ -17,10 +17,10 @@ function SettingPage({swal}) {
             value: featuredProductId,
         });
 
-        await axios.put('/api/settings', {
-            name: 'serviceFee',
-            value: serviceFee,
-        });
+        // await axios.put('/api/settings', {
+        //     name: 'serviceFee',
+        //     value: serviceFee,
+        // });
         setIsLoading(false);
         await  swal.fire({
             title:'Setting saved!',
@@ -40,9 +40,9 @@ function SettingPage({swal}) {
 
         });
 
-        await axios.get('/api/settings?name=serviceFee').then(r => {
-            setServiceFee(r.data.value);
-        })
+        // await axios.get('/api/settings?name=serviceFee').then(r => {
+        //     setServiceFee(r.data.value);
+        // })
     }
 
     useEffect(() => {
@@ -72,12 +72,12 @@ function SettingPage({swal}) {
                             <option value={product._id}>{product.title}</option>
                         ))}
                     </select>
-                    <label>Service Price (percentage)</label>
-                    <input
-                        type="number"
-                        value={serviceFee}
-                        onChange={ev =>
-                            setServiceFee(ev.target.value)}/>
+                    {/*<label>Service Price (percentage)</label>*/}
+                    {/*<input*/}
+                    {/*    type="number"*/}
+                    {/*    value={serviceFee}*/}
+                    {/*    onChange={ev =>*/}
+                    {/*        setServiceFee(ev.target.value)}/>*/}
                     <div>
                         <button
                             onClick={saveSetting}

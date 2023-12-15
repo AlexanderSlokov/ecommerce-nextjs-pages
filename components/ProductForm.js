@@ -11,6 +11,67 @@ const sanitizeInput = (input) => {
     return sanitizedInput;
 };
 
+const itineraryTemplate = `
+--- Follow this template to fill in the information of a new tour.
+--- If there are fields you don't have information, delete it.
+--- Remember to delete this guideline section too.
+
+# ITINERARY [You can add more days]
+
+## Day 1: Arrival in [DESTINATION CITY] ([MEAL INCLUSIONS])
+- Gathering Point: [GATHERING LOCATION], [SPECIFIC AREA DETAILS]
+- Guide Assistance: [SPECIFIC ASSISTANCE PROVIDED]
+- Transfer: [TRANSFER METHOD] to accommodation, check-in
+- Evening Plans: [EVENING ACTIVITY DESCRIPTION] (expenses not included)
+- Stay: Overnight in [DESTINATION CITY]
+
+## Day 2: Exploring [DESTINATION CITY] ([MEAL INCLUSIONS])
+- Morning Departure: [DEPARTURE METHOD] to [MORNING LOCATION]
+- Daytime Activities: [ACTIVITIES DESCRIPTION] (expenses not included)
+- Visits:
+  * [VISIT LOCATION 1]
+  * [VISIT LOCATION 2]
+  * [VISIT LOCATION 3]
+- Evening Entertainment: [EVENING ENTERTAINMENT DESCRIPTION]
+- Stay: Overnight in [ACCOMMODATION LOCATION]
+
+... and so on until the last section of the tour...
+
+## Day [ the last day]: Departure from [DESTINATION CITY] to [NEXT DESTINATION OR RETURN CITY] ([MEAL INCLUSIONS])
+- Morning: Checkout after breakfast
+- Itinerary:
+  * [ITINERARY STOP 1]
+  * [ITINERARY STOP 2]
+  * [ITINERARY STOP 3]
+  * [ITINERARY STOP 4]
+  * Shopping: [SHOPPING DETAILS DESCRIPTION]
+- Transfer: [TRANSFER METHOD] to [DEPARTURE POINT]
+- Tour Conclusion: [TOUR END LOCATION] or [NEXT DESTINATION DETAILS]
+
+# ADDITIONAL NOTES
+- Include any pertinent details that apply to all days or general information about the tour.
+
+# TRANSPORTATION INFORMATION
+
+## Arrival at [DESTINATION CITY]
+- Date: [ARRIVAL DATE]
+- Time: [ARRIVAL TIME]
+- Mode: [MODE OF TRANSPORT] (e.g., Flight, Train, Bus, Ship)
+- Details:
+  * Service Number: [SERVICE NUMBER], [CARRIER NAME]
+  * Departure Point: [DEPARTURE POINT], Terminal/Gate: [TERMINAL/GATE]
+  * [OTHER PERTINENT DETAILS]
+
+## Departure from [DESTINATION CITY]
+- Date: [DEPARTURE DATE]
+- Time: [DEPARTURE TIME]
+- Mode: [MODE OF TRANSPORT] (e.g., Flight, Train, Bus, Ship)
+- Details:
+  * Service Number: [SERVICE NUMBER], [CARRIER NAME]
+  * Departure Point: [DEPARTURE POINT], Terminal/Gate: [TERMINAL/GATE]
+  * [OTHER PERTINENT DETAILS]
+`;
+
 export default function ProductForm({
                                         _id,
                                         title: existingTitle,
@@ -29,7 +90,7 @@ export default function ProductForm({
     // Declare variables used
     const [title, setTitle] = useState(existingTitle || '');
     const [destination, setDestination] = useState(existingDestination || '');
-    const [description, setDescription] = useState(existingDescription || '');
+    const [description, setDescription] = useState(existingDescription || itineraryTemplate);
     const [category, setCategory] = useState(assignedCategory || '');
     const [productProperties, setProductProperties] = useState(assignedProperties || {});
     const [price, setPrice] = useState(existingPrice || '');
@@ -67,8 +128,19 @@ export default function ProductForm({
 
     const handleDescriptionChange = (event) => {
         setDescription(event.target.value);
-
+        // Adjust the height to fit the content
+        event.target.style.height = 'inherit';
+        event.target.style.height = `${event.target.scrollHeight}px`;
     };
+
+    // When the component loads, adjust the textarea height
+    useEffect(() => {
+        const textArea = document.getElementById('descriptionTextArea');
+        if (textArea) {
+            textArea.style.height = 'inherit';
+            textArea.style.height = `${textArea.scrollHeight}px`;
+        }
+    }, []);
 
     const handleCapacityChange = (event) => {
         const sanitizedCapacity = sanitizeInput(event.target.value);
@@ -261,9 +333,11 @@ export default function ProductForm({
 
             <label>Description: </label>
             <textarea
+                id="descriptionTextArea"
                 placeholder={"Tour description"}
                 value={description}
                 onChange={handleDescriptionChange}
+                style={{ overflow: 'hidden' }}
             ></textarea>
 
             <label>Price (in USD):</label>
