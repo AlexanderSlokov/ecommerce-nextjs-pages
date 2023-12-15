@@ -59,3 +59,17 @@ table.basic a{
 label{
   @apply text-blue-900 bg-white;
 }
+
+.container {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  gap: 10px; /* Adjust as needed */
+}
+
+.description {
+  /* Other styles */
+}
+
+.textField {
+  /* Other styles */
+}

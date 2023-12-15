@@ -1,6 +1,6 @@
 import {useRouter} from "next/router";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Spinner from "@/components/Spinner";
 import {ReactSortable} from "react-sortablejs";
 
@@ -117,12 +117,12 @@ export default function ProductForm({
     }, []);
 
     const handleTitleChange = (event) => {
-        const sanitizedTitle = sanitizeInput(event.target.value);
-        setTitle(sanitizedTitle);
+        const title = event.target.value;
+        setTitle(title);
     };
 
     const handleDestinationChange = (event) => {
-        const sanitizedDestination = sanitizeInput(event.target.value);
+        const sanitizedDestination = event.target.value;
         setDestination(sanitizedDestination);
     };
 
@@ -298,7 +298,7 @@ export default function ProductForm({
                     {/*Load our images from the aws link*/}
                     {!!images?.length && images.map(link => (
                         <div key={link} className={"h-72 bg-white p-4 shadow-md rounded-sm border border-gray-200"}>
-                            <img src={link} alt="" className={"rounded-lg"}/>
+                            <img src={link} alt="Loading" className={"rounded-lg"}/>
                         </div>
                     ))}
                 </ReactSortable>
@@ -337,7 +337,7 @@ export default function ProductForm({
                 placeholder={"Tour description"}
                 value={description}
                 onChange={handleDescriptionChange}
-                style={{ overflow: 'hidden' }}
+                // style={{ overflow: 'hidden' }}
             ></textarea>
 
             <label>Price (in USD):</label>
