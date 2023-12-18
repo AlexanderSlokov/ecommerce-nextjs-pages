@@ -23,16 +23,47 @@ function Categories({swal}) {
             setIsLoading(false);
         });
     }
-    async function saveCategory(ev){
+
+    async function saveCategory(ev) {
         ev.preventDefault();
         const data = {
             name,
             parentCategory,
-            properties:properties.map(p => ({
-                name:p.name,
-                values:p.values.split(','),
+            properties: properties.map(p => ({
+                name: p.name,
+                values: p.values.split(','),
             })),
         };
+
+        // Define a regex pattern for valid characters
+        const validNamePattern = /^[a-zA-Z0-9 _-]+$/;
+
+        // Validate category name for invalid characters
+        if (!validNamePattern.test(name)) {
+            await swal.fire({
+                title: 'Invalid Characters',
+                text: 'The category name contains invalid characters. Only alphanumeric characters, spaces, hyphens, and underscores are allowed.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        // Check if a category name already exists
+        const categoryExists = categories.some(category => category.name.toLowerCase() === name.toLowerCase());
+
+        if (categoryExists) {
+            // Show Swal warning if category name exists
+            await swal.fire({
+                title: 'Category Already Exists',
+                text: `The category name "${name}" is already in use. Please choose a different name.`,
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        // Proceed with saving the category
         if (editedCategory) {
             data._id = editedCategory._id;
             await axios.put('/api/categories', data);
@@ -40,11 +71,15 @@ function Categories({swal}) {
         } else {
             await axios.post('/api/categories', data);
         }
+
+        // Reset form and fetch categories
         setName('');
         setParentCategory('');
         setProperties([]);
         fetchCategories();
     }
+
+
     function editCategory(category){
         setEditedCategory(category);
         setName(category.name);
@@ -217,6 +252,6 @@ function Categories({swal}) {
     );
 }
 
-export default withSwal(({swal}, ref) => (
+export default withSwal(({swal}) => (
     <Categories swal={swal} />
 ));
