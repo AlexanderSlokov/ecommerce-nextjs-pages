@@ -4,7 +4,7 @@ import axios from "axios";
 import {withSwal} from "react-sweetalert2";
 import Spinner from "@/components/Spinner";
 import {prettyDate} from "@/lib/date";
-
+import React from 'react'; // Add this line to import React
 function AdminPage({swal}) {
     const [email, setEmail] = useState('');
     const [adminEmails, setAdminEmails] = useState([]);

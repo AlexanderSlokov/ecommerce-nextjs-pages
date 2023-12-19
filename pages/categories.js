@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import { withSwal } from "react-sweetalert2";
 import Spinner from "@/components/Spinner";
+import React from 'react'; // Add this line to import React
 
 function Categories({swal}) {
     const [editedCategory, setEditedCategory] = useState(null);

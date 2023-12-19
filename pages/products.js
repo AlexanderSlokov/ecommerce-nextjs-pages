@@ -3,7 +3,7 @@ import Link from "next/link";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
-
+import React from 'react'; // Add this line to import React
 export default function Products() {
 
     // Loading list of products as an array

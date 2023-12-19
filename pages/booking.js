@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
-
+import React from 'react'; // Add this line to import React
 function formatDateTime(dateString) {
     const options = {
         year: 'numeric',

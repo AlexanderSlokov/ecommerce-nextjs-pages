@@ -1,5 +1,5 @@
 import {useSession} from "next-auth/react";
-
+import React from 'react'; // Add this line to import React
 export default function HomeHeader() {
     const {data:session} = useSession();
     return (

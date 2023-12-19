@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
 import {subHours} from "date-fns";
+import React from 'react'; // Add this line to import React
+
 
 export default function HomeStats() {
     const [isLoading, setIsLoading] = useState(false);

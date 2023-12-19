@@ -3,7 +3,7 @@ import axios from "axios";
 import React, {useEffect, useState} from "react";
 import Spinner from "@/components/Spinner";
 import {ReactSortable} from "react-sortablejs";
-
+import { uploadImages } from './uploadImages';
 const sanitizeInput = (input) => {
     console.log('Before sanitization:', input);
     const sanitizedInput = input.replace(/[^a-zA-Z0-9\s]/g, '');
@@ -98,12 +98,9 @@ export default function ProductForm({
     const [endDate, setEndDate] = useState(existingEndDate ? formatDate(existingEndDate) : '');
     const [capacity, setCapacity] = useState(existingCapacity || '');
     const [categories, setCategories] = useState([]);
-
     const [images, setImages] = useState(existingImages || []);
     const [isUploading, setIsUpLoading] = useState(false);
-
     const [categoriesLoading, setCategoriesLoading] = useState(false);
-
     // Router used to re-navigate back to the main categories
     const router = useRouter();
     const [goBackToProducts, setGobackToProduct] = useState(false);
@@ -125,6 +122,26 @@ export default function ProductForm({
         const sanitizedDestination = event.target.value;
         setDestination(sanitizedDestination);
     };
+
+    const handleFileChange = async (event) => {
+        const files = event.target.files;
+        await uploadImages(files, handleUploadStart, handleUploadSuccess, handleUploadError);
+    };
+
+    const handleUploadStart = () => {
+        setIsUpLoading(true); // This function will be called when upload starts
+    };
+
+    const handleUploadSuccess = (links) => {
+        setImages(oldImages => [...oldImages, ...links]);
+        setIsUpLoading(false); // This function will be called when upload is successful
+    };
+
+    const handleUploadError = () => {
+        // Handle the error here, maybe set an error message in state
+        setIsUpLoading(false); // This function will be called if there is an upload error
+    };
+
 
     const handleDescriptionChange = (event) => {
         setDescription(event.target.value);
@@ -193,24 +210,24 @@ export default function ProductForm({
     }
 
     //function for upload image
-    async function uploadImages(ev) {
-        const files = ev.target?.files;
-
-        if (files?.length > 0 ) {
-          setIsUpLoading(true);
-          const data = new FormData();
-          for (const file of files) {
-              // files.forEach(file => data.append('file',file));
-              data.append('file', file);
-          }
-
-          const respond = await axios.post('/api/upload', data);
-          setImages(oldImages => {
-              return [...oldImages,...respond.data.links];
-          });
-          setIsUpLoading(false);
-        }
-    }
+    // async function uploadImages(ev) {
+    //     const files = ev.target?.files;
+    //
+    //     if (files?.length > 0 ) {
+    //       setIsUpLoading(true);
+    //       const data = new FormData();
+    //       for (const file of files) {
+    //           // files.forEach(file => data.append('file',file));
+    //           data.append('file', file);
+    //       }
+    //
+    //       const respond = await axios.post('/api/upload', data);
+    //       setImages(oldImages => {
+    //           return [...oldImages,...respond.data.links];
+    //       });
+    //       setIsUpLoading(false);
+    //     }
+    // }
 
     function uploadImagesOrder(images) {
         setImages(images);
@@ -318,7 +335,7 @@ export default function ProductForm({
                     </div>
 
                     <input type="file"
-                           onChange={uploadImages}
+                           onChange={handleFileChange}
                            className={"hidden"}/>
                 </label>
             </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import React from 'react'; // Add this line to import React
 
 export default function Logo() {
     return (

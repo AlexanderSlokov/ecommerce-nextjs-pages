@@ -2,7 +2,7 @@ import Nav from "@/components/nav";
 import { useSession, signIn,} from "next-auth/react";
 import {useState} from "react";
 import Logo from "@/components/Logo";
-
+import React from 'react'; // Add this line to import React
 import SpinnerWithBackground from "@/components/SpinnerWithBackground";
 
 export default function Layout({children}) {

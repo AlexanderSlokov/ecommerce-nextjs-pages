@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
 import {withSwal} from "react-sweetalert2";
+import React from 'react'; // Add this line to import React
 
 function SettingPage({swal}) {
     const [products, setProducts] = useState([]);
