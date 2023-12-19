@@ -3,16 +3,31 @@ import { useSession, signIn,} from "next-auth/react";
 import {useState} from "react";
 import Logo from "@/components/Logo";
 
+import SpinnerWithBackground from "@/components/SpinnerWithBackground";
+
 export default function Layout({children}) {
     const {data: session } = useSession();
-
     const [showNav, setShowNav] = useState(false);
 
-    if (!session)  {
+    // State for managing spinner visibility
+    const [loading, setLoading] = useState(false);
+
+    // Modified login function
+    const handleLogin = () => {
+        setLoading(true); // Show spinner
+        signIn('google').finally(() => setLoading(false)); // Hide spinner after login attempt
+    };
+
+    if (!session) {
         return (
             <div className="bg-bgGray w-screen h-screen flex items-center">
                 <div className="text-center w-full">
-                    <button onClick={() => signIn('google')} className="bg-white p-2 px-4 items-center rounded-md">Login with Google</button>
+                    {/* Show spinner when loading is true */}
+                    {loading ? <SpinnerWithBackground/> :
+                        <button onClick={handleLogin} className="bg-white p-2 px-4 items-center rounded-md">
+                            Login with Google
+                        </button>
+                    }
                 </div>
             </div>
         );

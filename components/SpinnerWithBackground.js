@@ -23,10 +23,10 @@ const StyledGif = styled.img`
     }
 `;
 
-export default function Spinner({ fullWidth }) {
+export default function SpinnerWithBackground({ fullWidth }) {
     return (
         <Wrapper fullWidth={fullWidth}>
-            <StyledGif src="/output-onlinegiftools.gif" alt="Loading..." />
+            <StyledGif src="/herta-honkai-star-rail.gif" alt="Loading..." />
         </Wrapper>
     );
 }

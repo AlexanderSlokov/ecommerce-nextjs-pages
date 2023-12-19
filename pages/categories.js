@@ -49,7 +49,10 @@ function Categories({swal}) {
             return;
         }
 
-        // Check if a category name already exists
+        // Check if a
+        //
+        //
+        // category name already exists
         const categoryExists = categories.some(category => category.name.toLowerCase() === name.toLowerCase());
 
         if (categoryExists) {
